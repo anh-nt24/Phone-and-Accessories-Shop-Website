@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@v6-alpha1/dist/css/tempus-dominus.css">
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        .h-font {
+            font-family: 'Merienda', cursive;
+        }
+
+        .card-profile-image {
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -30%);
+        }
+
+        .edit-img-btn {
+            left: calc(50% + 90px);
+            /* x% = % of the img, + img width/2 */
+            transform: translate(-50%, 50%);
+        }
+
+        .edit-btn {
+            right: 15%;
+        }
+
+        .edit-inline {
+            top: -40%;
+        }
+
+        .w-10 {
+            width: 10% !important;
+            min-width: 40px;
+        }
+
+        /*remove scrollbar in textarea but allow scrolling*/
+        textarea {
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /*remove scrollbar in textarea*/
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
+
+        /*remove the focus border which is black*/
+        .form-control-plaintext:focus {
+            outline: none;
+        }
+
+        /*to replicate .form-control:focus blue glow color when in focus*/
+        .form-control-focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+            border: 0.3px solid rgba(13, 110, 253, 0.7) !important;
+            border-radius: 4px;
+        }
+
+        .avt-upload {
+            /* width: .1px; */
+            /* height: .1px; */
+            opacity: 0;
+            /* z-index: -1; */
+            position: absolute;
+            top: 0;
+            left: 0px;
+        }
+    </style>
+
+</head>
+<body>
+    <style>
+    @keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    .animate--drop-in-fade-out {
+        animation: drop-in-fade-out 3.5s 0.4s cubic-bezier(.32, 1.75, .65, .91);
+    }
+
+
+    @-webkit-keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            -webkit-transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            -webkit-transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    @-moz-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -moz- */
+    }
+
+    @-o-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -o- */
+    }
+
+    @-ms-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -ms- */
+    }
+
+    .flash {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+        width: 350px;
+        padding: 20px 25px 20px 85px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #ff4d4d;
+        background-color: #FFF;
+        border: 2px solid #ff4d4d;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+    }
+
+    .flash.success {
+        border-color: #51a626 !important;
+        color: #51a626 !important;
+    }
+
+    .flash__icon.success {
+        background: #51a626 !important;
+    }
+
+    .flash__icon {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1.8em;
+        height: 100%;
+        padding: 0 0.4em;
+        background-color: #ff4d4d;
+        color: #FFF;
+        font-size: 36px;
+        font-weight: 300;
+        transform: translate(0, -50%);
+    }
+
+    .flash__icon .icon {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+</style>
+<div class="flash" id="flashMessage">
+                            </div>
+    <div class="container mb-5" style="margin-top: 75px;">
+        <div class="row justify-content-center">
+            <section class="col-6">
+                <div class="card shadow pb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-4 position-relative">
+                            <img id="avatar" src="./admin/upload/user/<?php echo $avt ?>" class="rounded-circle card-profile-image position-absolute top-0 start-50">
+                            <span class="btn btn-light btn-sm rounded-circle edit-img-btn position-absolute">
+                                <i class="bi bi-camera-fill">
+                                    <input onchange="ableBtn()" id="avt" class="avt-upload" name="avt" type="file">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-header bg-secondary border-0 pt-5 pb-5"> </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center my-4">
+                            <div class="h2">
+                                <input type="text" class="text-center form-control-plaintext mx-aut0 m-0 p-0" name="name" id="name"/>
+                            </div>
+                        </div>
+                        <table class="table" style="align-self: center;">
+                            <tbody>
+                                <tr>
+                                    <td>Username</td>
+                                    <td>
+                                        <input readonly="true" type="text" class="form-control-plaintext mx-auto p-0" name="username" id="username" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gmail</td>
+                                    <td>
+                                        <input readonly="true" type="email" class="form-control-plaintext mx-auto p-0" name="gmail" id="gmail"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="mb-0">
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col col-md-4 col-sm-6">
+                                <button id="save" class="btn btn-primary" type="button" disabled="true">
+                                    Confirm changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <section class="container mt-4 show-password" style="display: none">
+                        <div class="row">
+                            <div class="col">
+                                <label for="">
+                                    <span style="color: red">Confirm your password: </span>
+                                    <input id="password" name="password" type="password" required="true">
+                                </label>
+                                <button type="button" id="confirm" name="confirm" class="btn btn-primary" onclick="confirmPassword()">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <span id="status"></span>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-eMNCOe7tC1doHpGoWe/6oMVemdAVTMs2xqW4mwXrXsW0L84Iytr2wi5v2QjrP/xp" crossorigin="anonymous"></script>
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@v6-alpha1/dist/js/tempus-dominus.js" crossorigin="anonymous"></script>
+    
+    <script src="/js/jwt.js"></script>
+
+    <script>
+        document.title = 'Profile'
+        const userData = JSON.parse(sessionStorage.getItem('information'));
+
+        document.getElementById('name').value = userData.FullName;
+        document.getElementById('username').value = userData.UserName;
+        document.getElementById('gmail').value = userData.Gmail;
+        const buffer = new Uint8Array(userData.Avatar.data).buffer;
+        const blob = new Blob([buffer], { type: 'image/png' }); 
+        const objectURL = URL.createObjectURL(blob);
+        const img = document.getElementById('avatar')
+        img.src = objectURL;
+
+        const confirmPassword = async () => {
+            const Password = document.getElementById('password').value;
+            const fileInput = document.getElementById('avt');
+            const file = fileInput.files[0];
+            var Avatar = [];
+
+            if (file) {
+                await new Promise((resolve) => {
+                    const reader = new FileReader();
+
+                    reader.onload = function (event) {
+                        const buffer = new Uint8Array(event.target.result);
+                        Avatar = Array.from(buffer);
+                        const avatarJsonString = {
+                            "type": "Buffer",
+                            "data": Avatar
+                        };
+
+                        sessionStorage.setItem('information', JSON.stringify({
+                            ...JSON.parse(sessionStorage.getItem('information')),
+                            Avatar: avatarJsonString
+                        }));
+                        resolve(); 
+                    };
+
+                    reader.onerror = function (event) {
+                        console.error('Error reading file:', event.target.error);
+                        resolve();
+                    };
+
+                    reader.readAsArrayBuffer(file);
+                });
+            } else {
+                console.error('No file selected.');
+            }
+            
+            const credentials = {
+                UserName: userData.UserName,
+                Password,
+                OldPassword: Password,
+                Avatar
+            };
+            
+            fetch('/api/login/changeInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials)
+            })
+                .then(response => {
+                    if (!response.ok && response.status == 400) {
+                        document.getElementById('status').innerText = 'Wrong password';
+                        throw new Error('Change failed');
+                    }
+
+                    const flash = document.querySelector('#flashMessage');
+                    let type = 'success';
+                    let message = 'The information has been successfully changed'
+                    if (!response.ok) {
+                        type = 'failed';
+                        message = 'The information has been failed changed'
+                        throw new Error(response.status);
+                    }
+                    let html = `
+                        <div class="flash__icon ${type}">
+                            ${type === 'success' ?
+                                '<i class="icon fa fa-check"></i>' :
+                                '<i class="icon fa fa-times-circle-o"></i>'
+                            }
+                        </div>
+                        <p>${message}</p>
+                    `;
+
+                    flash.innerHTML = html;
+                    flash.classList.add(type);
+                    flash.classList.add("animate--drop-in-fade-out");
+                    // Remove the animation class after 3 seconds
+                    setTimeout(function () {
+                        flash.classList.remove("animate--drop-in-fade-out");
+                        window.location.reload();
+                    }, 1500);
+                })
+        }
+
+        const ableBtn = () => {
+            document.querySelector("#save").disabled = false;
+        };
+
+
+        document.querySelector('#save').addEventListener('click', () => {
+            document.querySelector('.show-password').style.display = "";
+        })
+    </script>
+</body>

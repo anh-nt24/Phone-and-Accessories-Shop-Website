@@ -1,0 +1,230 @@
+<!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-12">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <div class="container">
+                    <div class="form-row row">
+                        <div class="col">
+                            <input id="dateFrom" type="date" class="form-control">
+                        </div>
+                        <div class="col">
+                            <input id="dateTo" type="date" class="form-control">
+                        </div>
+                        <div class="col">
+                            <button onclick="filterStatistic()" type="button" class="btn btn-success">Ok</button>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col">
+                            <button onclick="filterYesterday()" type="button" class="btn btn-outline-danger">Yesterday</button>
+                            <button onclick="filterWeek()" type="button" class="btn btn-outline-danger">This week</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sale & Revenue End -->
+
+
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex flex-column mb-4">
+            <h6 class="mb-0">Statistic</h6>
+            <ul style="text-align: left;">
+                <li id="total-amount"></li>
+                <li id="order-num"></li>
+            </ul>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">#</th>
+                        <th scope="col">Employee</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Order's amount of money</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="statistic-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->
+<script src="/js/jwt.js"></script>
+<script>
+    document.title = 'Admin - Statistic';
+
+    function rearrangeDateString(originalDateString) {
+        const parts = originalDateString.split('-');
+        const rearrangedParts = [parts[0], parts[2], parts[1]];
+        const rearrangedDateString = rearrangedParts.join('-');
+        return rearrangedDateString;
+    }
+
+    const jwt = getJwtCookie();
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    }
+
+    const filterStatistic = () => {
+        const from = rearrangeDateString(document.getElementById('dateFrom').value);
+        const to = rearrangeDateString(document.getElementById('dateTo').value);
+        const reqData = {
+            "From": from,
+            "To": to,
+            "Order": "ascending"
+        };
+
+        getStatistic(reqData);
+    }
+
+    function getYesterdayDateRange() {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        const year = yesterday.getFullYear();
+        const month = (yesterday.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+        const day = yesterday.getDate().toString().padStart(2, '0');
+
+        const yesterdayDateRange = `${year}-${day}-${month}`;
+
+        return yesterdayDateRange;
+    }
+
+
+    const filterYesterday = () => {
+        const from = getYesterdayDateRange();
+
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0'); 
+        const day = today.getDate().toString().padStart(2, '0');
+
+        const to = `${year}-${day}-${month}`;
+
+        const reqData = {
+            "From": from,
+            "To": to,
+            "Order": "ascending"
+        };
+
+        getStatistic(reqData);
+    }
+
+    const filterWeek = () => {
+        const today = new Date();
+        const currentDayOfWeek = today.getDay(); 
+        const daysSinceBeginningOfWeek = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
+
+        const startDate = new Date(today);
+        startDate.setDate(today.getDate() - daysSinceBeginningOfWeek);
+
+        // Format the start date
+        const yearStart = startDate.getFullYear();
+        const monthStart = (startDate.getMonth() + 1).toString().padStart(2, '0');
+        const dayStart = startDate.getDate().toString().padStart(2, '0');
+        const from = `${yearStart}-${dayStart}-${monthStart}`;
+
+        // Format the end date (today)
+        const yearEnd = today.getFullYear();
+        const monthEnd = (today.getMonth() + 1).toString().padStart(2, '0');
+        const dayEnd = today.getDate().toString().padStart(2, '0');
+        const to = `${yearEnd}-${dayEnd}-${monthEnd}`;
+
+        const reqData = {
+            "From": from,
+            "To": to,
+            "Order": "ascending"
+        };
+
+        getStatistic(reqData);
+    };
+
+
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); 
+    const day = today.getDate().toString().padStart(2, '0');
+
+    const formattedDate = `${year}-${day}-${month}`;
+
+    // Get the next day
+    const nextDay = new Date(today);
+    nextDay.setDate(today.getDate() + 1);
+
+    const nextYear = nextDay.getFullYear();
+    const nextMonth = (nextDay.getMonth() + 1).toString().padStart(2, '0');
+    const nextDayOfMonth = nextDay.getDate().toString().padStart(2, '0');
+    const formattedNextDate = `${nextYear}-${nextDayOfMonth}-${nextMonth}`;
+
+
+    const getStatistic = (reqData) => {
+        fetch('/api/analyse', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(reqData)
+        }) .then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        }) .then(data => {
+
+            document.getElementById('total-amount').textContent = 'Total amount of money: ' + formatMoney(data.data.totalAmount) + ' VND';
+            document.getElementById('order-num').textContent = 'Total amount of order: ' + data.data.numberOfOrder;
+
+
+            let html = '';
+            let numberOfProducts = 0;
+
+            const orders = data.data.orders;
+
+            orders.forEach((order, idx) => {
+
+                const date = new Date(order.DateOfPurchase);
+
+                const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric' });
+                const formattedTime = timeFormat.format(date);
+
+                const monthFormat = new Intl.DateTimeFormat('en-US', { month: 'short' });
+                const formattedMonth = monthFormat.format(date);
+                const day = date.getDate();
+                const year = date.getFullYear();
+
+                const formattedDate = `${formattedTime} ${formattedMonth} ${day} ${year}`;
+
+                html += `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${order.EmployeeName}</td>
+                        <td>${formattedDate}</td>
+                        <td>${formatMoney(order.TotalAmount)}</td>
+                        <td>
+                            <button onclick="viewInfo('${order._id}')" class="btn btn-primary"> <i class="fa fa-info-circle" aria-hidden="true"></i> </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('statistic-body').innerHTML = html;
+        })
+    }
+
+    const reqData = {
+        "From": formattedDate,
+        "To": formattedNextDate,
+        "Order": "ascending"
+    };
+
+    getStatistic(reqData);
+</script>

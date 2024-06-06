@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "6575bb39a8cce20df17bf432"
+  },
+  "Name": "Anh Nguyen",
+  "PhoneNumber": "0123456789",
+  "Address": "19 Đ. Nguyễn Hữu Thọ, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bb47a8cce20df17bf435"
+  },
+  "Name": "Nguyen Anh",
+  "PhoneNumber": "0987654321",
+  "Address": "19 Đ. Nguyễn Hữu Thọ, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bb5da8cce20df17bf438"
+  },
+  "Name": "Dang Viet",
+  "PhoneNumber": "0112233445",
+  "Address": "19 Đ. Nguyễn Hữu Thọ, Tân Hưng, Quận 7, Thành phố Hồ Chí Minh",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575c75df30ac5885e79243a"
+  },
+  "Name": "Dang Viet",
+  "PhoneNumber": "0123456780",
+  "Address": "Tp Ho Chi Minh",
+  "__v": 0
+}]

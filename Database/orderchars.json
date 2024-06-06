@@ -1,0 +1,121 @@
+[{
+  "_id": {
+    "$oid": "6575bd831ca0d12327354b80"
+  },
+  "TotalAmount": 5000000,
+  "AmountOfMoneyGivenByCustomer": 5000000,
+  "ExcessAmount": 0,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1683898243000"
+    }
+  },
+  "PhoneNumber": "0123456789",
+  "EmployeeName": "Le Thi Phi Du",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bd9b1ca0d12327354b94"
+  },
+  "TotalAmount": 40890000,
+  "AmountOfMoneyGivenByCustomer": 50000000,
+  "ExcessAmount": 9110000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1694525467000"
+    }
+  },
+  "PhoneNumber": "0987654321",
+  "EmployeeName": "Le Thi Phi Du",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bdb21ca0d12327354ba8"
+  },
+  "TotalAmount": 46790000,
+  "AmountOfMoneyGivenByCustomer": 50000000,
+  "ExcessAmount": 3210000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1697117490000"
+    }
+  },
+  "PhoneNumber": "0987654321",
+  "EmployeeName": "Le Thi Phi Du",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bdd61ca0d12327354bc9"
+  },
+  "TotalAmount": 700000,
+  "AmountOfMoneyGivenByCustomer": 1000000,
+  "ExcessAmount": 300000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1686576726000"
+    }
+  },
+  "PhoneNumber": "0112233445",
+  "EmployeeName": "Le Thi Phi Du",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575be061ca0d12327354be3"
+  },
+  "TotalAmount": 6320000,
+  "AmountOfMoneyGivenByCustomer": 6500000,
+  "ExcessAmount": 180000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1697117574000"
+    }
+  },
+  "PhoneNumber": "0112233445",
+  "EmployeeName": "Le Thi Phi Du",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575beaa1ca0d12327354c0d"
+  },
+  "TotalAmount": 40890000,
+  "AmountOfMoneyGivenByCustomer": 50000000,
+  "ExcessAmount": 9110000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1697117738000"
+    }
+  },
+  "PhoneNumber": "0112233445",
+  "EmployeeName": "Dang Quoc Loc",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575bee3416a5e9a66767af8"
+  },
+  "TotalAmount": 6650000,
+  "AmountOfMoneyGivenByCustomer": 7000000,
+  "ExcessAmount": 350000,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1694525796000"
+    }
+  },
+  "PhoneNumber": "0987654321",
+  "EmployeeName": "Dang Quoc Loc",
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575c775f30ac5885e792441"
+  },
+  "TotalAmount": 5000000,
+  "AmountOfMoneyGivenByCustomer": 5000000,
+  "ExcessAmount": 0,
+  "DateOfPurchase": {
+    "$date": {
+      "$numberLong": "1697119989000"
+    }
+  },
+  "PhoneNumber": "0123456780",
+  "EmployeeName": "Nguyen The Anh",
+  "__v": 0
+}]

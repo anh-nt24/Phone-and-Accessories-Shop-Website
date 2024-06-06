@@ -1,0 +1,651 @@
+<style>
+    @keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    .animate--drop-in-fade-out {
+        animation: drop-in-fade-out 3.5s 0.4s cubic-bezier(.32, 1.75, .65, .91);
+    }
+
+
+    @-webkit-keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            -webkit-transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            -webkit-transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    @-moz-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -moz- */
+    }
+
+    @-o-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -o- */
+    }
+
+    @-ms-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -ms- */
+    }
+
+    .flash {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+        width: 350px;
+        padding: 20px 25px 20px 85px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #ff4d4d;
+        background-color: #FFF;
+        border: 2px solid #ff4d4d;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+    }
+
+    .flash.success {
+        border-color: #51a626 !important;
+        color: #51a626 !important;
+    }
+
+    .flash__icon.success {
+        background: #51a626 !important;
+    }
+
+    .flash__icon {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1.8em;
+        height: 100%;
+        padding: 0 0.4em;
+        background-color: #ff4d4d;
+        color: #FFF;
+        font-size: 36px;
+        font-weight: 300;
+        transform: translate(0, -50%);
+    }
+
+    .flash__icon .icon {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+</style>
+
+<div class="container-fluid px-4 pt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="bg-light p-4 pl-5">
+                <div class="d-none d-md-flex col-10 ms-4">
+                    <input id="search" class="form-control border-0 w-50" type="search" placeholder="username@example.com">
+                    <div style="border-right: 1px solid #ccc; margin-left: 50px"></div>
+                    <button onclick="addEmployee()" class="btn btn-success" style="margin-left: 50px">Add new employee</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="flash" id="flashMessage">
+            </div>
+            <div id="employee-list" style="min-height: 450px;" class="bg-light rounded h-100 p-4">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th style="width: 30%;" scope="col">Full Name</th>
+                            <th scope="col">Username</th>
+                            <th style="width: 25%;" scope="col">Gmail</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employees">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+        * {
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        .h-font {
+            font-family: 'Merienda', cursive;
+        }
+
+        .card-profile-image {
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -30%);
+        }
+
+        .edit-img-btn {
+            left: calc(50% + 90px);
+            /* x% = % of the img, + img width/2 */
+            transform: translate(-50%, 50%);
+        }
+
+        .edit-btn {
+            right: 15%;
+        }
+
+        .edit-inline {
+            top: -40%;
+        }
+
+        .w-10 {
+            width: 10% !important;
+            min-width: 40px;
+        }
+
+        /*remove scrollbar in textarea but allow scrolling*/
+        textarea {
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /*remove scrollbar in textarea*/
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
+
+        /*remove the focus border which is black*/
+        .form-control-plaintext:focus {
+            outline: none;
+        }
+
+        /*to replicate .form-control:focus blue glow color when in focus*/
+        .form-control-focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+            border: 0.3px solid rgba(13, 110, 253, 0.7) !important;
+            border-radius: 4px;
+        }
+
+        .avt-upload {
+            /* width: .1px; */
+            /* height: .1px; */
+            opacity: 0;
+            /* z-index: -1; */
+            position: absolute;
+            top: 0;
+            left: 0px;
+        }
+    </style>
+
+<script src="/js/script.js"></script>
+<script>
+    document.title = 'Admin - Employee Management'
+    // /api/admin/employees
+    const jwt = getJwtCookie();
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    }
+
+
+    fetch('/api/admin/employees', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwt}`
+        },
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Fetch employee data failed');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const employees = data.data;
+            const table = document.querySelector('#employees');
+            let html = '';
+            employees.forEach((employee, idx) => {
+                html += `
+                <tr>
+                    <th scope="row">${idx + 1}</th>
+                    <td>${employee.FullName}</td>
+                    <td>${employee.UserName}</td>
+                    <td>${employee.Gmail}</td>
+                    <td>
+                        <button onclick="viewInfo('${employee._id}')" class="btn btn-primary"> <i class="fa fa-info-circle" aria-hidden="true"></i> </button>
+                        <button onclick="viewSale('${employee._id}')" class="btn btn-success"> <i class="fas fa-dollar-sign"></i> </button>
+                        <button onclick="locked('${employee._id}', ${employee.Status})" class="btn btn-danger"> <i class="fa fa-solid fa-lock"></i> </button>
+                        <button onclick="resendMail('${employee.Gmail}')" class="btn btn-info" > <i class="fa fa-envelope" aria-hidden="true"></i> </button>
+                    </td>
+                </tr>
+            `
+            });
+
+            table.innerHTML = html;
+
+        })
+        .catch(error => {
+            console.error('Login error', error);
+        });
+
+    const viewSale = (id) => {
+        fetch('/api/admin/sale/'+id, {
+            method: 'GET',
+            headers: headers
+        }) .then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        }) .then(data => {
+            const saleInfo = data.data;
+
+            let totalAmountSum = 0;
+            saleInfo.forEach(item => {
+                totalAmountSum += item.TotalAmount;
+            });
+            const totalOrder = saleInfo.length;
+            let html = `
+                <div class="container-fluid pt-4 px-4">
+                        <div class="row g-4">
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="bg-white rounded d-flex align-items-center justify-content-between p-4">
+                                    <i class="fa fa-chart-line fa-3x text-primary"></i>
+                                    <div class="ms-3">
+                                        <p class="mb-2">Total amount of money</p>
+                                        <h6 id="total-money" class="mb-0"> ${totalAmountSum} VND</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xl-6">
+                                <div class="bg-white rounded d-flex align-items-center justify-content-between p-4">
+                                    <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                                    <div class="ms-3">
+                                        <p class="mb-2">Total orders</p>
+                                        <h6 id="total-order" class="mb-0">${totalOrder}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid pt-4 px-4">
+                        <div class="bg-light text-center rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h6 class="mb-0">Sale information</h6>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                    <thead>
+                                        <tr class="text-dark">
+                                            <th scope="col"><input class="form-check-input" type="checkbox"></th>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Customer</th>
+                                            <th scope="col">Amount</th>
+                                            <th scope="col">Detail</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+            `;
+
+            saleInfo.forEach(info => {
+                const dateString = info.DateOfPurchase;
+                const dateObject = new Date(dateString);
+
+                const options = { 
+                    year: 'numeric', 
+                    month: 'short', 
+                    day: 'numeric', 
+                    hour: 'numeric', 
+                    minute: 'numeric', 
+                    second: 'numeric', 
+                    hour12: false 
+                };
+
+                const formattedDate = dateObject.toLocaleDateString('en-US', options);
+
+                html += `
+                    <tr>
+                        <td><input class="form-check-input" type="checkbox"></td>
+                        <td>${formattedDate}</td>
+                        <td>${info.PhoneNumber}</td>
+                        <td>${info.TotalAmount}</td>
+                        <td><button class="btn btn-sm btn-primary" onclick="detailInvoice('${info._id}')">View Invoice Detail</button></td>
+                    </tr>
+                `;
+            })
+
+            html += `
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+            `;
+            document.getElementById('employee-list').innerHTML = html;
+        })
+    }
+
+    const detailInvoice = (orderId) => {
+        const endpoint = '/api/order/printInvoice/' + orderId;
+        fetch(endpoint, {
+            method: 'GET',
+            headers: headers
+        })
+        .then(response => response.blob())
+        .then(blob => {
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = `${orderId}.pdf`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        })
+        .catch(error => console.error('Error downloading PDF:', error));
+    }
+
+    const ableBtn = () => {
+        document.querySelector("#save").disabled = false;
+    };
+
+
+    const confirm = async(username) => {
+        const fileInput = document.getElementById('avt');
+        const file = fileInput.files[0];
+        var Avatar = [];
+
+        if (file) {
+            await new Promise((resolve) => {
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    const buffer = new Uint8Array(event.target.result);
+                    Avatar = Array.from(buffer);
+                    const avatarJsonString = {
+                        "type": "Buffer",
+                        "data": Avatar
+                    };
+                    resolve(); 
+                };
+
+                reader.onerror = function (event) {
+                    console.error('Error reading file:', event.target.error);
+                    resolve();
+                };
+
+                reader.readAsArrayBuffer(file);
+            });
+        } else {
+            console.error('No file selected.');
+        }
+        
+        const credentials = {
+            UserName: username,
+            Avatar
+        };
+
+        fetch('/api/login/changeInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Information updated');
+                    } else {
+                        console.log(response);
+                    }
+                })
+    }
+
+
+    const viewInfo = (userId) => {
+        const api = '/api/admin/employee/' + userId;
+        fetch(api, {
+            method: 'GET',
+            headers: headers
+        }).then (response => {
+            if (!response.ok) {
+                console.log(response);
+                throw new Error(response.status);
+            }
+            return response.json();
+        }) .then(data => {
+            const employee = data.data;
+
+            const buffer = new Uint8Array(employee.Avatar.data).buffer;
+            const blob = new Blob([buffer], { type: 'image/png' }); 
+            const imageURL = URL.createObjectURL(blob);
+
+            document.getElementById('employee-list').innerHTML = `
+                <div class="card shadow pb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-4 position-relative">
+                            <img id="avatar" src="${imageURL}" class="rounded-circle card-profile-image position-absolute top-0 start-50">
+                            <span class="btn btn-light btn-sm rounded-circle edit-img-btn position-absolute">
+                                <i class="bi bi-camera-fill">
+                                    <input onchange="ableBtn()" id="avt" class="avt-upload" name="avt" type="file">
+                                </i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-header bg-secondary border-0 pt-5 pb-5"> </div>
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center my-4">
+                            <div class="h2">
+                                <input type="text" class="text-center form-control-plaintext mx-aut0 m-0 p-0" name="name" id="name"/>
+                            </div>
+                        </div>
+                        <table class="table" style="align-self: center;">
+                            <tbody>
+                                <tr>
+                                    <td>Username</td>
+                                    <td>
+                                        <input value="${employee.UserName}" readonly="true" type="text" class="form-control-plaintext mx-auto p-0" name="username" id="username" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Gmail</td>
+                                    <td>
+                                        <input value="${employee.Gmail}" readonly="true" type="email" class="form-control-plaintext mx-auto p-0" name="gmail" id="gmail"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr class="mb-0">
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col col-md-4 col-sm-6">
+                                <button onclick="confirm('${employee.UserName}')" id="save" class="btn btn-primary" type="button" disabled="true">
+                                    Confirm changes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            `;
+        })
+        
+    }
+
+    const addEmployee = () => {
+        document.getElementById('employee-list').innerHTML = `
+            <h2>Add new Employee</h2>
+            <div class="mb-2">
+                <label for="customer-name" class="form-label">Employee's name</label>
+                <input class="form-control" id="customer-name">
+            </div>
+            <div class="mb-2">
+                <label for="customer-gmail" class="form-label">Employee's gmail</label>
+                <input class="form-control" id="customer-gmail">
+            </div>
+            <button onclick="addNewEmployee()" class="btn btn-primary">Add</button>
+            <button onclick="cancelAdding()" class="btn btn-danger">Cancel</button>
+        `;
+    }
+
+    const addNewEmployee = () => {
+        const UserFullName = document.getElementById('customer-name').value;
+        const UserGmail = document.getElementById('customer-gmail').value;
+
+        const credentials = { UserGmail, UserFullName };
+    
+        fetch('/api/admin/createUser', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(credentials)
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            }
+            console.log(response)
+            throw new Error(response.status);
+        });
+
+    }
+
+    const cancelAdding = () => {
+        window.location.reload();
+    }
+
+    const resendMail = (UserGmail) => {
+        // /api/admin/mailbox
+        fetch('/api/admin/mailbox', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
+            },
+            body: JSON.stringify({UserGmail})
+        })
+            .then(response => {
+                const flash = document.querySelector('#flashMessage');
+                let type = 'success';
+                let message = 'Send validation mail successfully'
+                if (!response.ok) {
+                    type = 'failed';
+                    message = 'Send validation mail failed'
+                    throw new Error('Send validation went wrong');
+                }
+                let html = `
+                <div class="flash__icon ${type}">
+                    ${type === 'success' ?
+                        '<i class="icon fa fa-check"></i>' :
+                        '<i class="icon fa fa-times-circle-o"></i>'
+                    }
+                </div>
+                <p>${message}</p>
+            `;
+                flash.innerHTML = html;
+                flash.classList.add(type);
+                flash.classList.add("animate--drop-in-fade-out");
+                // Remove the animation class after 3 seconds (adjust as needed)
+                setTimeout(function () {
+                    flash.classList.remove("animate--drop-in-fade-out");
+                }, 3000);
+            });
+
+    }
+
+    const locked = (id, status) => {
+        const api = `/api/admin/lockAndUnlock/${id}`;
+        fetch(api, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${jwt}`
+            },
+            body: JSON.stringify({"Request": status === "active" ? "lock" : "active"})
+        })
+            .then(response => {
+                const flash = document.querySelector('#flashMessage');
+                let type = 'success';
+                let message = 'Successfully'
+                if (!response.ok) {
+                    type = 'failed';
+                    message = 'Failed'
+                    throw new Error('Failed');
+                }
+                let html = `
+                <div class="flash__icon ${type}">
+                    ${type === 'success' ?
+                        '<i class="icon fa fa-check"></i>' :
+                        '<i class="icon fa fa-times-circle-o"></i>'
+                    }
+                </div>
+                <p>${message}</p>
+            `;
+                flash.innerHTML = html;
+                flash.classList.add(type);
+                flash.classList.add("animate--drop-in-fade-out");
+                // Remove the animation class after 3 seconds (adjust as needed)
+                setTimeout(function () {
+                    flash.classList.remove("animate--drop-in-fade-out");
+                }, 3000);
+            });
+    }
+</script>

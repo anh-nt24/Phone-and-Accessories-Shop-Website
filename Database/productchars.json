@@ -1,0 +1,127 @@
+[{
+  "_id": {
+    "$oid": "6575b7d9a8cce20df17bf3d8"
+  },
+  "ImportPrice": 33890000,
+  "ProductName": "iPhone 15 Pro Max",
+  "BarCode": "000000000",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 41990000,
+  "SoldByProduct": 4,
+  "SoldByOrder": 4,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b7fba8cce20df17bf3dd"
+  },
+  "ImportPrice": 4500000,
+  "ProductName": "OPPO A38",
+  "BarCode": "000000001",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 5000000,
+  "SoldByProduct": 5,
+  "SoldByOrder": 5,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b81aa8cce20df17bf3e3"
+  },
+  "ImportPrice": 5490000,
+  "ProductName": "Samsung Galaxy A24",
+  "BarCode": "000000002",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 6320000,
+  "SoldByProduct": 1,
+  "SoldByOrder": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b83da8cce20df17bf3ea"
+  },
+  "ImportPrice": 4350000,
+  "ProductName": "OPPO A57 128GB",
+  "BarCode": "000000003",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 4800000,
+  "SoldByProduct": 1,
+  "SoldByOrder": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b893a8cce20df17bf3f2"
+  },
+  "ImportPrice": 500000,
+  "ProductName": "Tai nghe Có Dây Apple MMTN2",
+  "BarCode": "000000004",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 550000,
+  "SoldByProduct": 10,
+  "SoldByOrder": 5,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b8bea8cce20df17bf3fb"
+  },
+  "ImportPrice": 570000,
+  "ProductName": "Xmobile 22.5W T121",
+  "BarCode": "000000005",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 640000,
+  "SoldByProduct": 0,
+  "SoldByOrder": 0,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6575b8f2a8cce20df17bf405"
+  },
+  "ImportPrice": 100000,
+  "ProductName": "Cáp Lightning 1m Xmobile DR-L001X",
+  "BarCode": "000000006",
+  "Status": null,
+  "CreationDate": {
+    "$date": {
+      "$numberLong": "1697115836000"
+    }
+  },
+  "Category": "",
+  "RetailPrice": 150000,
+  "SoldByProduct": 1,
+  "SoldByOrder": 1,
+  "__v": 0
+}]

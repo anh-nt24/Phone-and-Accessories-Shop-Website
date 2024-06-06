@@ -1,0 +1,213 @@
+<style>
+    @keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    .animate--drop-in-fade-out {
+        animation: drop-in-fade-out 3.5s 0.4s cubic-bezier(.32, 1.75, .65, .91);
+    }
+
+
+    @-webkit-keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            -webkit-transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            -webkit-transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    @-moz-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -moz- */
+    }
+
+    @-o-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -o- */
+    }
+
+    @-ms-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -ms- */
+    }
+
+    .flash {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+        width: 350px;
+        padding: 20px 25px 20px 85px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #ff4d4d;
+        background-color: #FFF;
+        border: 2px solid #ff4d4d;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+    }
+
+    .flash.success {
+        border-color: #51a626 !important;
+        color: #51a626 !important;
+    }
+
+    .flash__icon.success {
+        background: #51a626 !important;
+    }
+
+    .flash__icon {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1.8em;
+        height: 100%;
+        padding: 0 0.4em;
+        background-color: #ff4d4d;
+        color: #FFF;
+        font-size: 36px;
+        font-weight: 300;
+        transform: translate(0, -50%);
+    }
+
+    .flash__icon .icon {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+</style>
+<div id="content" class="container-fluid pt-2 px-4">
+    <div class="row p-3">
+        <div class="bg-light rounded d-flex align-items-center justify-content-between p-2">
+            <div class="container" style="min-height: 500px;">
+                <div class="row mt-5">
+                    <div class="col-12 d-flex justify-content-center bg-light rounded">
+                        <div class="w-50">
+                            <div class="flash" id="flashMessage">
+                            </div>
+                            <h2>Add new customer</h2>
+                            <div class="mb-2">
+                                <label for="customer-name" class="form-label">Customer's name</label>
+                                <input class="form-control" id="customer-name">
+                            </div>
+                            <div class="mb-2">
+                                <label for="customer-phone" class="form-label">Customer's phone number</label>
+                                <input class="form-control" id="customer-phone">
+                            </div>
+                            <div class="mb-2">
+                                <label for="customer-address" class="form-label">Customer's address</label>
+                                <input class="form-control" id="customer-address">
+                            </div>
+                            <button onclick="addCustomer()" class="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/js/jwt.js"></script>
+<script>
+    document.title = 'POS - Customer Management';
+
+    const jwt = getJwtCookie();
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    }
+
+    const addCustomer = () => {
+        const Name = document.getElementById('customer-name').value;
+        const PhoneNumber = document.getElementById('customer-phone').value;
+        const Address = document.getElementById('customer-address').value;
+        const data = { Name, PhoneNumber, Address };
+
+        
+        if (!jwt) {
+            return;
+        }
+
+        fetch('/api/customer', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                const flash = document.querySelector('#flashMessage');
+                let type = 'success';
+                let message = 'Customer created successfully'
+                if (!response.ok) {
+                    type = 'failed';
+                    message = 'Customer created failed'
+                    throw new Error(data);
+                }
+                let html = `
+                    <div class="flash__icon ${type}">
+                        ${type === 'success' ?
+                            '<i class="icon fa fa-check"></i>' :
+                            '<i class="icon fa fa-times-circle-o"></i>'
+                        }
+                    </div>
+                    <p>${message}</p>
+                `;
+
+                flash.innerHTML = html;
+                flash.classList.add(type);
+                flash.classList.add("animate--drop-in-fade-out");
+                // Remove the animation class after 3 seconds (adjust as needed)
+                setTimeout(function () {
+                    flash.classList.remove("animate--drop-in-fade-out");
+                }, 3000);
+            })
+    }
+</script>

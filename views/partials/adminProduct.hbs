@@ -1,0 +1,387 @@
+<style>
+    @keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    .animate--drop-in-fade-out {
+        animation: drop-in-fade-out 3.5s 0.4s cubic-bezier(.32, 1.75, .65, .91);
+    }
+
+
+    @-webkit-keyframes drop-in-fade-out {
+        0% {
+            opacity: 0;
+            visibility: visible;
+            -webkit-transform: translate3d(0, -200%, 0);
+        }
+
+        12% {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        70% {
+            opacity: 1;
+            visibility: visible;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+
+        80% {
+            opacity: 0;
+        }
+
+        100% {
+            visibility: hidden;
+            -webkit-transform: translate3d(75%, 0, 0);
+        }
+    }
+
+    @-moz-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -moz- */
+    }
+
+    @-o-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -o- */
+    }
+
+    @-ms-keyframes drop-in-fade-out {
+        /* Same as above, replace -webkit- with -ms- */
+    }
+
+    .flash {
+        display: block;
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+        width: 350px;
+        padding: 20px 25px 20px 85px;
+        font-size: 16px;
+        font-weight: 400;
+        color: #ff4d4d;
+        background-color: #FFF;
+        border: 2px solid #ff4d4d;
+        border-radius: 2px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+    }
+
+    .flash.success {
+        border-color: #51a626 !important;
+        color: #51a626 !important;
+    }
+
+    .flash__icon.success {
+        background: #51a626 !important;
+    }
+
+    .flash__icon {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1.8em;
+        height: 100%;
+        padding: 0 0.4em;
+        background-color: #ff4d4d;
+        color: #FFF;
+        font-size: 36px;
+        font-weight: 300;
+        transform: translate(0, -50%);
+    }
+
+    .flash__icon .icon {
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+</style>
+
+<div class="container-fluid px-4 pt-4">
+    <div class="row mx-2">
+        <div class="col-12 bg-light p-4 pl-5">
+                <div class="container">
+                    <div class="form-row row">
+                        <div class="form-group col-md-6">
+                            <label for="name"><b>Product name</b></label>
+                            <input type="text" class="form-control" id="name" placeholder="Product name">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="importPrice"><b>Import price</b></label>
+                            <input type="number" class="form-control" id="importPrice" placeholder="1000000">
+                        </div>
+                        <div class="form-group col-md-6 mt-1">
+                            <label for="retailPrice"><b>Retail price</b></label>
+                            <input type="number" class="form-control" id="retailPrice" placeholder="1000000">
+                        </div>
+                        <div class="form-group col-md-6 mt-4">
+                            <button id="addBtn" onclick="addProduct()" class="btn btn-primary" style="float: right">Add new product</button>
+                            <button id="editBtn" onclick="editProduct()" class="btn btn-warning" style="float: right; display: none">Edit product</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="flash" id="flashMessage">
+            </div>
+            <div id="product-list" style="min-height: 450px;" class="bg-light rounded h-100 p-4">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Product name</th>
+                            <th scope="col">Barcode</th>
+                            <th scope="col">Date created</th>
+                            <th scope="col">Import price</th>
+                            <th scope="col">Retail price</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+        * {
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        .h-font {
+            font-family: 'Merienda', cursive;
+        }
+
+        .card-profile-image {
+            width: 180px;
+            height: 180px;
+            transform: translate(-50%, -30%);
+        }
+
+        .edit-img-btn {
+            left: calc(50% + 90px);
+            /* x% = % of the img, + img width/2 */
+            transform: translate(-50%, 50%);
+        }
+
+        .edit-btn {
+            right: 15%;
+        }
+
+        .edit-inline {
+            top: -40%;
+        }
+
+        .w-10 {
+            width: 10% !important;
+            min-width: 40px;
+        }
+
+        /*remove scrollbar in textarea but allow scrolling*/
+        textarea {
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /*remove scrollbar in textarea*/
+        textarea::-webkit-scrollbar {
+            display: none;
+        }
+
+        /*remove the focus border which is black*/
+        .form-control-plaintext:focus {
+            outline: none;
+        }
+
+        /*to replicate .form-control:focus blue glow color when in focus*/
+        .form-control-focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+            border: 0.3px solid rgba(13, 110, 253, 0.7) !important;
+            border-radius: 4px;
+        }
+
+        .avt-upload {
+            /* width: .1px; */
+            /* height: .1px; */
+            opacity: 0;
+            /* z-index: -1; */
+            position: absolute;
+            top: 0;
+            left: 0px;
+        }
+    </style>
+
+<script src="/js/script.js"></script>
+<script src="/js/jwt.js"></script>
+<script>
+    document.title = 'Admin - Product Management'
+    // /api/admin/employees
+    const jwt = getJwtCookie();
+
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwt}`
+    }
+
+    const editProduct = () => {
+        const productId = document.getElementById('editBtn').getAttribute('data-id');
+        const ImportPrice = document.getElementById('importPrice').value;
+        const ProductName = document.getElementById('name').value;
+        const RetailPrice = document.getElementById('retailPrice').value;
+
+        const data = {
+            ImportPrice, ProductName, RetailPrice, Category: ""
+        }
+
+        fetch('/api/product/'+productId, {
+            method: 'PUT',
+            headers: headers,
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            window.location.reload();
+        })
+    }
+
+    const viewInfo = (id) => {
+        fetch('/api/product/' + id, {
+            method: 'GET',
+            headers: headers,
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        }).then (data => {
+            const product = data.data;
+            document.getElementById('importPrice').value = product.ImportPrice;
+            document.getElementById('name').value = product.ProductName;
+            document.getElementById('retailPrice').value = product.RetailPrice;
+
+            document.getElementById('editBtn').style.display = 'block';
+            document.getElementById('editBtn').setAttribute('data-id', product._id);
+            document.getElementById('addBtn').style.display = 'none';
+
+        })
+    }
+
+    const addProduct = () => {
+        const ImportPrice = document.getElementById('importPrice').value;
+        const ProductName = document.getElementById('name').value;
+        const RetailPrice = document.getElementById('retailPrice').value;
+
+        const data = {
+            ImportPrice, ProductName, RetailPrice, Category: ""
+        }
+
+        fetch('/api/product', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            window.location.reload();
+        })
+    }
+
+    const deleteProduct = (id) => {
+        var isConfirmed = confirm("Are you sure you want to delete this product?");
+
+        if (isConfirmed) {
+            fetch('/api/product/' + id, {
+                method: 'DELETE',
+                headers: headers
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                }
+                window.location.reload();
+            })
+        }
+    }
+
+
+   fetch('/api/product', {
+        method: 'GET',
+        headers: headers
+    }) .then(response => {
+        if (!response.ok) {
+            throw new Error(response.status);
+        }
+        return response.json();
+    }) .then(data => {
+        const products = data.data;
+        let html = '';
+        products.forEach((product, idx) => {
+            const date = new Date(product.CreationDate);
+
+            const timeFormat = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric' });
+            const formattedTime = timeFormat.format(date);
+
+            const monthFormat = new Intl.DateTimeFormat('en-US', { month: 'short' });
+            const formattedMonth = monthFormat.format(date);
+            const day = date.getDate();
+            const year = date.getFullYear();
+
+            const formattedDate = `${formattedTime} ${formattedMonth} ${day} ${year}`;
+
+            html += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td>${product.ProductName}</td>
+                    <td>${product.BarCode}</td>
+                    <td>${formattedDate}</td>
+                    <td>${formatMoney(product.ImportPrice)} VND</td>
+                    <td>${formatMoney(product.RetailPrice)} VND</td>
+                    <td>
+                        <button onclick="deleteProduct('${product._id}')" class="btn btn-danger"> <i class="fa fa-solid fa-lock"></i> </button>
+                        <button onclick="viewInfo('${product._id}')" class="btn btn-primary"> <i class="fa fa-info-circle" aria-hidden="true"></i> </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById('products').innerHTML = html;
+    })
+</script>

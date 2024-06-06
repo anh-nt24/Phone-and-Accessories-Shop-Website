@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    {{!-- <title>POS - Admin</title> --}}
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+
+    <!-- Favicon -->
+    <link href="/images/phone.png" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    {{{body}}}
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="/assets/lib/chart/chart.min.js"></script>
+    <script src="/assets/lib/easing/easing.min.js"></script>
+    <script src="/assets/lib/waypoints/waypoints.min.js"></script>
+    <script src="/assets/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="/assets/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="/assets/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="/assets/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        function checkJwtCookie() {
+            const jwtCookie = getCookie('jwt');
+
+            if (!jwtCookie && !window.location.pathname.includes('/login')) {
+                window.location.href = '/login';
+            }
+        }
+
+        function getCookie(cookieName) {
+            const name = cookieName + "=";
+            const decodedCookie = decodeURIComponent(document.cookie);
+            const cookieArray = decodedCookie.split(';');
+
+            for (let i = 0; i < cookieArray.length; i++) {
+                let cookie = cookieArray[i].trim();
+
+                if (cookie.indexOf(name) === 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+
+            return null;
+        }
+
+        
+        checkJwtCookie();
+
+        {{!-- if (sessionStorage.getItem("passwordChanged") != null && sessionStorage.getItem("passwordChanged") == 'false') {
+            if (!window.location.href.includes('/changepassword')) {
+                window.location.href = '/changepassword';
+            }
+        } --}}
+
+        const data = JSON.parse(sessionStorage.getItem('information'));
+        if (data) {
+            // set avatar
+            const buffer = new Uint8Array(data.Avatar.data).buffer;
+            const blob = new Blob([buffer], { type: 'image/png' }); 
+            const objectURL = URL.createObjectURL(blob);
+            const imgArr = document.querySelectorAll('.avatar');
+            imgArr.forEach(img => {
+                img.src = objectURL;
+            })
+            let url = window.location.href.split('/').slice(-1)[0];
+            const availableUrl = ['', 'admin', 'customer', 'statistic', 'employee', 'product'];
+            if (availableUrl.includes(url)) {
+                // set name
+                document.querySelector('.username').textContent = data.UserName;
+
+                // set email
+                if (data.Role !== 'admin') {
+                    document.querySelector('.gmail').textContent =  data.FullName;
+                } else {
+                    document.querySelector('.gmail').textContent = data.Gmail;
+                }
+
+                // set role
+                document.querySelector('.role').textContent = data.Role.toUpperCase();
+            }
+
+            if (data.Role === 'user') {
+                document.getElementById('navnav').innerHTML = `
+                    <a id="home" href="/" class="nav-item admin-nav nav-link active"><i
+                        class="fa fa-tachometer-alt me-2"></i>Selling
+                    </a>
+                    <a id="customer" href="/customer"  class="nav-item admin-nav nav-link"><i class="fa fa-user me-2" aria-hidden="true"></i>Customer</a>
+                    <a id="statistic" href="/statistic"  class="nav-item admin-nav nav-link"><i class="fa fa-chart-bar me-2"></i>Statistics</a>
+                `
+            } else if (data.Role === 'admin') {
+                document.getElementById('navnav').innerHTML = `
+                    <a id="home" href="/admin" class="nav-item admin-nav nav-link active"><i
+                        class="fa fa-tachometer-alt me-2"></i>Dashboard
+                    </a>
+                    <a id="employee" href="/admin/employee"  class="nav-item admin-nav nav-link"><i class="fa fa-th me-2"></i>Employees</a>
+                    <a id="product" href="/admin/product"  class="nav-item admin-nav nav-link"><i class="fa fa-keyboard me-2"></i>Products</a>
+                    <a id="statistic" href="/admin/statistic"  class="nav-item admin-nav nav-link"><i class="fa fa-chart-bar me-2"></i>Statistics</a>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

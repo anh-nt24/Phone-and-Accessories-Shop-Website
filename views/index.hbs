@@ -1,0 +1,83 @@
+{{> header}}
+
+<div id="content" class="content">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+        <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+            <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
+        </a>
+        <button onclick="toggle()" class="btn sidebar-toggler flex-shrink-0">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="navbar-nav align-items-center ms-auto">
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <img class="rounded-circle me-lg-2 avatar" alt="" style="width: 40px; height: 40px;">
+                    <span class="d-none d-lg-inline-flex username"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                    <a href="/profile" class="dropdown-item">My Profile</a>
+                    <a href="/changepassword" class="dropdown-item">Change password</a>
+                    <a href="#" onclick="logout()" class="dropdown-item" style="color: red;">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    {{!-- {{> adminDashboard}} --}}
+    {{> (lookup . 'partial')}}
+
+
+
+    <!-- Footer Start -->
+    {{> footer }}
+    <!-- Footer End -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/js/script.js"></script>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i];
+                var eqPos = cookie.indexOf("=");
+                var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+            window.location.replace('/login');
+        }
+
+        $(document).ready(function() {
+            // Get the current URL path
+            const currentPath = window.location.pathname;
+
+            // Remove "active" class from all links
+            const allLinks = document.querySelectorAll('.nav-item.nav-link');
+            allLinks.forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // Find the link that matches the current URL and add "active" class
+            const activeLink = document.querySelector(`.nav-item.nav-link[href="${currentPath}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        });
+        var isOpen = true;
+        const toggle = () => {
+            const navbar = document.querySelector('#header');
+            const content = document.querySelector('#content');
+            if (isOpen) {
+                navbar.style = 'display: none';
+                content.style = 'margin: 0; width: 100%';
+            } else {
+                navbar.style = 'display: block';
+                content.style = 'margin-left: 250px; width: calc(100% - 250px)';
+            }
+            isOpen = !isOpen;
+        }
+        
+    </script>
+</div>
